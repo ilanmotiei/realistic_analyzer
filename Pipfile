@@ -7,6 +7,12 @@ name = "pypi"
 pandas = "*"
 requests = "*"
 tqdm = "*"
+requests-cache = "*"
+pyproj = "*"
+rtree = "*"
+geopy = "*"
+geopandas = "*"
+networkx = "*"
 
 [dev-packages]
 

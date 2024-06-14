@@ -1,5 +1,6 @@
 class Config:
-    DATA_LOCATION_FILEPATH: str = "/Users/ilanmotiei/Desktop/gov_scraper/results/parsed_results.csv"
+    DATA_LOCATION_FILEPATH: str = "/Users/ilanmotiei/Desktop/gov_scraper/miscellaneous/results_replicas/replicaC/parsed_results.csv"
+    GEOCODING_DATA_DIR_LOCATION: str = "/Users/ilanmotiei/Desktop/gov_scraper/geolocation_results/pages/"
 
     # Original fields names
     DEAL_DATE_FIELD_NAME: str = "DEALDATE"
@@ -25,6 +26,15 @@ class Config:
     SETTLEMENT_FIELD_NAME: str = "settlement"
 
     # Calculated fields names
-    LATITUDE_FIELD_NAME: str = "latitude"
-    LONGITUDE_FIELD_NAME: str = "longitude"
+    X_ITM_FIELD_NAME: str = "X_ITM"
+    Y_ITM_FIELD_NAME: str = "Y_ITM"
+    X_WSG_FIELD_NAME: str = "X_WSG84"
+    Y_WSG_FIELD_NAME: str = "Y_WSG84"
 
+    # other
+    ITM_EPSG_CODE: str = "2039"
+    WSG84_EPSG_CODE: str = "4326"
+
+    DATA_DIRPATH = "/Users/ilanmotiei/Desktop/University/לימודים/מנהל עסקים/Networked Markets & Graph Analysis/real_estate_analysis/analyzer/data"
+    VERTICES_FILEPATH = f'{DATA_DIRPATH}/vertices.csv'
+    EDGES_FILEPATH = f'{DATA_DIRPATH}/edges.csv'
