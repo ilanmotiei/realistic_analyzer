@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 import geopandas as gpd
-from shapely import Point
+from shapely import Point, Polygon
 
 from src.config import Config
 from src.preprocess.utils import itm_to_wsg84
@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 
 class Preprocessor:
     @staticmethod
-    def load_data(radius: Optional[float], subset_polygon: Optional[]) -> Union[Tuple[gpd.GeoDataFrame, pd.DataFrame], gpd.GeoDataFrame]:
+    def load_data(radius: Optional[float], subset_polygon: Optional[Polygon]) -> Union[Tuple[gpd.GeoDataFrame, pd.DataFrame], gpd.GeoDataFrame]:
         df: pd.DataFrame = pd.read_csv(Config.DATA_LOCATION_FILEPATH)
         df: pd.DataFrame = df.replace('nan', np.NAN)
         df: pd.DataFrame = df.reset_index(drop=False)
