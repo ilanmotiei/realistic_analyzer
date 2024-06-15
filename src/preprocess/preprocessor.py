@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 
 class Preprocessor:
     @staticmethod
-    def load_data(radius: Optional[float]) -> Union[Tuple[gpd.GeoDataFrame, pd.DataFrame], gpd.GeoDataFrame]:
+    def load_data(radius: Optional[float], subset_polygon: Optional[]) -> Union[Tuple[gpd.GeoDataFrame, pd.DataFrame], gpd.GeoDataFrame]:
         df: pd.DataFrame = pd.read_csv(Config.DATA_LOCATION_FILEPATH)
         df: pd.DataFrame = df.replace('nan', np.NAN)
         df: pd.DataFrame = df.reset_index(drop=False)
