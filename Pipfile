@@ -18,6 +18,9 @@ matplotlib = "*"
 scipy = "*"
 openai = "*"
 torch = "*"
+scikit-learn = "*"
+torch-geometric = "*"
+gpd = "*"
 
 [dev-packages]
 

@@ -64,7 +64,7 @@ client = OpenAI(
 PAGE_SIZE: int = 100
 NUM_CONCURRENT_REQUESTS: int = 10
 
-with open('../../data/unique_floor_numbers_23062024.json', 'r', encoding='utf-8') as f:
+with open('../../data/15062024/unique_floor_numbers_23062024.json', 'r', encoding='utf-8') as f:
     floors: List[str] = json.load(fp=f)
 
 

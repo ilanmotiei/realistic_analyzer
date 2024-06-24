@@ -93,7 +93,7 @@ if __name__ == '__main__':
         api_key='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',
         organization='org-2gSXnlG2Pv2dEEFDiIgev2oS'
     )
-    with open('../../data/unique_floor_numbers_23062024.json', 'r', encoding='utf-8') as f:
+    with open('../../data/15062024/unique_floor_numbers_23062024.json', 'r', encoding='utf-8') as f:
         floors: List[str] = json.load(fp=f)
 
     floor_batches: List[List[str]] = [floors[i * PAGE_SIZE: (i+1) * PAGE_SIZE] for i in range(math.ceil(len(floors)/PAGE_SIZE))]

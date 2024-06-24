@@ -11,6 +11,16 @@ class Config:
                                         "Networked Markets & Graph Analysis/real_estate_analysis/analyzer/data/" \
                                         "all_israeli_settlements.json"
 
+    POST_PROCESSED_ADDRESSES_LOCATION: str = "/Users/ilanmotiei/Desktop/University/לימודים/מנהל עסקים/" \
+                                        "Networked Markets & Graph Analysis/real_estate_analysis/analyzer/data/24062024/" \
+                                            "addresses.csv"
+    POST_PROCESSED_DEALS_LOCATION: str = "/Users/ilanmotiei/Desktop/University/לימודים/מנהל עסקים/" \
+                                        "Networked Markets & Graph Analysis/real_estate_analysis/analyzer/data/24062024/" \
+                                            "deals.csv"
+    POST_PROCESSED_EDGES_LOCATION: str = "/Users/ilanmotiei/Desktop/University/לימודים/מנהל עסקים/" \
+                                         "Networked Markets & Graph Analysis/real_estate_analysis/analyzer/data/24062024/" \
+                                         "addresses_edges.csv"
+
     # Original fields names
     DEAL_DATE_FIELD_NAME: str = "DEALDATE"
     DEAL_DATETIME_FIELD_NAME: str = "DEALDATETIME"
@@ -39,10 +49,11 @@ class Config:
     Y_ITM_FIELD_NAME: str = "Y_ITM"
     X_WSG_FIELD_NAME: str = "X_WSG84"
     Y_WSG_FIELD_NAME: str = "Y_WSG84"
-    STARTING_FLOOR_NUMBER_FIELD_NAME: str = "STARTING_FLOOR"
-    NUMBER_FLOORS_FIELD_NAME: str = "NUM_FLOORS"
-    SETTLEMENT_NUMERIC_FIELD_NAME: str = "SETTLEMENT_NUMERIC"
+    STARTING_FLOOR_NUMBER_FIELD_NAME: str = "start_floor"
+    NUMBER_FLOORS_FIELD_NAME: str = "num_floors"
+    SETTLEMENT_NUMERIC_FIELD_NAME: str = "settlement_numeric"
     ADDRESS_IDX_FIELD_NAME: str = "address_idx"
+    DEAL_YEAR_FIELD_NAME: str = "year"
 
     # other
     ITM_EPSG_CODE: str = "2039"

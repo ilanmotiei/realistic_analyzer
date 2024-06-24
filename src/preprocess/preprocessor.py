@@ -215,12 +215,15 @@ class Preprocessor:
                 Config.STARTING_FLOOR_NUMBER_FIELD_NAME,
                 Config.NUMBER_FLOORS_FIELD_NAME,
                 Config.SETTLEMENT_NUMERIC_FIELD_NAME,
-                Config.ADDRESS_IDX_FIELD_NAME
+                Config.ADDRESS_IDX_FIELD_NAME,
+                Config.X_ITM_FIELD_NAME,
+                Config.Y_ITM_FIELD_NAME
             ]]
         )
         deal_types: List[str] = list(set(deals_df[Config.DEAL_TYPE_FIELD_NAME].to_list()))
         deals_df[Config.DEAL_TYPE_FIELD_NAME] = deals_df[Config.DEAL_TYPE_FIELD_NAME].apply(lambda x: deal_types.index(x))
         deals_df[Config.DEAL_DATE_FIELD_NAME] = pd.to_datetime(deals_df[Config.DEAL_DATE_FIELD_NAME], format='%d.%m.%Y')
+        deals_df[Config.DEAL_YEAR_FIELD_NAME] = deals_df[Config.DEAL_DATE_FIELD_NAME].dt.year.astype(int)
         earliest_date: datetime = deals_df[Config.DEAL_DATE_FIELD_NAME].min()
 
         def months_diff(date):
@@ -232,7 +235,8 @@ class Preprocessor:
         deals_df.reset_index(drop=True, inplace=True)
 
         addresses_df: pd.DataFrame = pd.DataFrame(self.addresses_gdf["address"])
-        addresses_df["centroid"] = [np.array((i.xy[0][0], i.xy[1][0])) for i in self.addresses_gdf.geometry]
+        addresses_df["centroid_X_ITM"] = [i.xy[0][0] for i in self.addresses_gdf.geometry]
+        addresses_df["centroid_Y_ITM"] = [i.xy[1][0] for i in self.addresses_gdf.geometry]
 
         return deals_df, addresses_df, self.addresses_edges
 
@@ -241,8 +245,6 @@ if __name__ == '__main__':
     RADIUS: float = 100
     preprocessor: Preprocessor = Preprocessor(radius_meters=RADIUS)
     deals, addresses, addresses_edges = preprocessor.create_final_output()
-    deals.to_csv('../../data/24062024/deals.csv')
-    addresses.to_csv('../../data/24062024/addresses.csv', index=True, index_label='index')
-    addresses_edges.to_csv()
-    # vertices.to_csv(Config.VERTICES_FILEPATH, index_label=True)
-    # edges.to_csv(f'{Config.DATA_DIRPATH}/edges_radius_{RADIUS}.csv', index=False)
+    deals.to_csv(Config.POST_PROCESSED_DEALS_LOCATION, index=False)
+    addresses.to_csv(Config.POST_PROCESSED_ADDRESSES_LOCATION, index=True, index_label='index')
+    addresses_edges.to_csv(Config.POST_PROCESSED_EDGES_LOCATION, index=False)

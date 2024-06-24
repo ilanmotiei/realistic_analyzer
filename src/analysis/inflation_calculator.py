@@ -10,35 +10,31 @@ import matplotlib.pyplot as plt
 from src.config import Config
 
 
-grid_itm: gpd.GeoDataFrame = gpd.read_file('../../miscellaneous/TelAviv_1km_Grid.shp')
-grid_itm.set_crs(Config.WSG84_EPSG_CODE, inplace=True)
-grid_itm: gpd.GeoDataFrame = grid_itm.to_crs(Config.ITM_EPSG_CODE)
-deals: pd.DataFrame = pd.read_csv('../../data/vertices_tel_aviv_final_no_hebrew.csv').drop(columns=['geometry'])
+grid_wsg: gpd.GeoDataFrame = gpd.read_file('../../data/Israel_1km_Grid/Israel_1km_Grid.shp')
+grid_wsg.set_crs(Config.WSG84_EPSG_CODE, inplace=True)
+grid_itm: gpd.GeoDataFrame = grid_wsg.to_crs(Config.ITM_EPSG_CODE)
+deals_df: pd.DataFrame = pd.read_csv(Config.POST_PROCESSED_DEALS_LOCATION)
 deals: gpd.GeoDataFrame = gpd.GeoDataFrame(
-    deals,
+    deals_df,
     geometry=[
         Point(x, y) if (not pd.isna(x)) and (not pd.isna(y)) else None
-        for x, y in zip(deals[Config.X_ITM_FIELD_NAME], deals[Config.Y_ITM_FIELD_NAME])
+        for x, y in zip(deals_df[Config.X_ITM_FIELD_NAME], deals_df[Config.Y_ITM_FIELD_NAME])
     ]
 )
-deals.replace('nan', np.nan, inplace=True)
-deals[Config.DEAL_DATE_FIELD_NAME] = pd.to_datetime(deals[Config.DEAL_DATE_FIELD_NAME], format='%d.%m.%Y')
-deals: gpd.GeoDataFrame = deals[deals[Config.DEAL_DATE_FIELD_NAME].dt.year <= 2023]
-deals.dropna(subset=[Config.ROOMS_NUMBER_FIELD_NAME, Config.DEAL_SUM_FIELD_NAME, Config.SIZE_FIELD_NAME], axis='rows', how='any', inplace=True)
-deals[Config.DEAL_SUM_FIELD_NAME] = deals[Config.DEAL_SUM_FIELD_NAME].str.replace(',', '').astype(float)
+deals: gpd.GeoDataFrame = deals[deals[Config.DEAL_YEAR_FIELD_NAME] <= 2023]
 deals.set_crs(Config.ITM_EPSG_CODE, inplace=True)
 
-joined: gpd.GeoDataFrame = gpd.sjoin(deals, grid_itm, how='inner', op='intersects')
+deals_gridded: gpd.GeoDataFrame = gpd.sjoin(deals, grid_itm, how='inner', op='intersects')
 
 stats: Dict[Hashable, Dict[Hashable, Dict[Hashable, Optional[float]]]] = {
     year: {
         segment_id: {
-            room_amount: None for room_amount in set(joined[Config.ROOMS_NUMBER_FIELD_NAME])
-        } for segment_id in set(grid_itm['FID'])
-    } for year in tqdm(set(joined[Config.DEAL_DATE_FIELD_NAME].dt.year))
+            room_amount: None for room_amount in set(deals_gridded[Config.ROOMS_NUMBER_FIELD_NAME])
+        } for segment_id in tqdm(set(grid_itm['FID']))
+    } for year in tqdm(set(deals_gridded[Config.DEAL_YEAR_FIELD_NAME]))
 }
 
-for year, year_df in tqdm(joined.groupby(joined[Config.DEAL_DATE_FIELD_NAME].dt.year)):
+for year, year_df in tqdm(deals_gridded.groupby(deals_gridded[Config.DEAL_DATE_FIELD_NAME].dt.year)):
     for segment_id, segment_year_df in year_df.groupby('FID'):
         for rooms_amount, rooms_amount_df in segment_year_df.groupby(Config.ROOMS_NUMBER_FIELD_NAME):
             avg_price_per_meter_df: pd.DataFrame = rooms_amount_df[Config.DEAL_SUM_FIELD_NAME] / rooms_amount_df[Config.SIZE_FIELD_NAME]
@@ -75,8 +71,8 @@ for year, year_stats in tqdm(stats.items()):
 
 # --- cumulative inflation plot ---
 
-# Years from 2006 to 2023
-years = list(range(2006, 2024))
+# Years from 1998 to 2023
+years = list(range(1998, 2024))
 
 # Calculate cumulative inflation relative to 2005 (base year)
 cumulative_inflation = []
@@ -90,7 +86,7 @@ for i in range(len(inflation_rates)):
 # Plotting
 plt.figure(figsize=(10, 5))
 plt.plot(years, cumulative_inflation, marker='o')
-plt.title('Cumulative Inflation Indexed to 2005')
+plt.title('Cumulative Inflation Indexed to 1998')
 plt.xlabel('Year')
 plt.ylabel('Index Points (2005 = 100)')
 plt.grid(True)
