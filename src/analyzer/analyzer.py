@@ -23,10 +23,10 @@ class Analyzer:
         if os.path.isfile(edges_filepath):
             logging.info("Edges file was found in filesystem, loading it")
             self.edges: pd.DataFrame = pd.read_csv(edges_filepath)
-            self.vertices: gpd.GeoDataFrame = Preprocessor.load_data(radius=None)
+            self.vertices: gpd.GeoDataFrame = Preprocessor.load_data(radius=None, settlements_subset=Config.SETTLEMENTS_SUBSET)
         else:
             logging.info("Edges file wasn't found in filesystem, deriving the edges")
-            self.vertices, self.edges = Preprocessor.load_data(radius=edges_radius)
+            self.vertices, self.edges = Preprocessor.load_data(radius=edges_radius, settlements_subset=Config.SETTLEMENTS_SUBSET)
             self.edges.to_csv(edges_filepath, index=False)
 
         logging.info(f"# Edges: {len(self.edges)}")
