@@ -90,7 +90,7 @@ def get_floors_translation(floors_str_list: List[str]) -> Optional[Dict[str, Any
 
 if __name__ == '__main__':
     client: OpenAI = OpenAI(
-        api_key='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',
+        api_key='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',  # not valid anymore friend..
         organization='org-2gSXnlG2Pv2dEEFDiIgev2oS'
     )
     with open('../../data/15062024/unique_floor_numbers_23062024.json', 'r', encoding='utf-8') as f:
