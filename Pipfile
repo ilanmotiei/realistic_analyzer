@@ -21,6 +21,7 @@ torch = "*"
 scikit-learn = "*"
 torch-geometric = "*"
 gpd = "*"
+branca = "*"
 
 [dev-packages]
 

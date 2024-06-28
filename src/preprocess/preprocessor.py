@@ -179,7 +179,7 @@ class Preprocessor:
         buffered: gpd.GeoDataFrame = addresses_gdf.copy()
         buffered['geometry'] = buffered.geometry.buffer(self.radius_meters)
         # Find edges using spatial join
-        possible_edges = gpd.sjoin(buffered, addresses_gdf, how='inner', op='intersects', lsuffix='left', rsuffix='right')  # can't run in debug mode as it runs twice
+        possible_edges = gpd.sjoin(buffered, addresses_gdf, how='inner', predicate='intersects', lsuffix='left', rsuffix='right')  # can't run in debug mode as it runs twice
         possible_edges = possible_edges[possible_edges.index != possible_edges.index_right]  # Filter out self-matches
         # Create a DataFrame from the edges
         edges_df = pd.DataFrame({
@@ -217,11 +217,18 @@ class Preprocessor:
                 Config.SETTLEMENT_NUMERIC_FIELD_NAME,
                 Config.ADDRESS_IDX_FIELD_NAME,
                 Config.X_ITM_FIELD_NAME,
-                Config.Y_ITM_FIELD_NAME
+                Config.Y_ITM_FIELD_NAME,
+                Config.X_WSG_FIELD_NAME,
+                Config.Y_WSG_FIELD_NAME,
+                Config.FULL_ADDRESS_FIELD_NAME,
+                Config.DISPLAY_ADDRESS_FIELD_NAME,
+                Config.TREND_FORMAT_FIELD_NAME,
+                Config.TREND_IS_NEGATIVE_FIELD_NAME,
+                Config.SETTLEMENT_FIELD_NAME
             ]]
         )
         deal_types: List[str] = list(set(deals_df[Config.DEAL_TYPE_FIELD_NAME].to_list()))
-        deals_df[Config.DEAL_TYPE_FIELD_NAME] = deals_df[Config.DEAL_TYPE_FIELD_NAME].apply(lambda x: deal_types.index(x))
+        deals_df[Config.DEAL_TYPE_NUMERIC_FIELD_NAME] = deals_df[Config.DEAL_TYPE_FIELD_NAME].apply(lambda x: deal_types.index(x))
         deals_df[Config.DEAL_DATE_FIELD_NAME] = pd.to_datetime(deals_df[Config.DEAL_DATE_FIELD_NAME], format='%d.%m.%Y')
         deals_df[Config.DEAL_YEAR_FIELD_NAME] = deals_df[Config.DEAL_DATE_FIELD_NAME].dt.year.astype(int)
         earliest_date: datetime = deals_df[Config.DEAL_DATE_FIELD_NAME].min()
@@ -229,8 +236,7 @@ class Preprocessor:
         def months_diff(date):
             return (date.year - earliest_date.year) * 12 + date.month - earliest_date.month
 
-        deals_df[Config.DEAL_DATE_FIELD_NAME] = deals_df[Config.DEAL_DATE_FIELD_NAME].apply(months_diff)
-        deals_df[Config.DEAL_DATE_FIELD_NAME] = deals_df[Config.DEAL_DATE_FIELD_NAME].astype(int)
+        deals_df[Config.DEAL_DATE_NUMERIC_FIELD_NAME] = deals_df[Config.DEAL_DATE_FIELD_NAME].apply(months_diff).astype(int)
         deals_df[Config.DEAL_SUM_FIELD_NAME] = deals_df[Config.DEAL_SUM_FIELD_NAME].str.replace(',', '').astype(float)
         deals_df.reset_index(drop=True, inplace=True)
 

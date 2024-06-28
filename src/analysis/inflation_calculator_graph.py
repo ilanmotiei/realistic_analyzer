@@ -40,11 +40,13 @@ CRITERIA: List[Dict[str, Any]] = [
     }
 ]
 
+MAXIMUM_YEARLY_INFLATION: float = 2
+
 
 def calc_yearly_inflation(current: gpd.GeoDataFrame, previous: gpd.GeoDataFrame) -> Tuple[float, int]:
     previous: gpd.GeoDataFrame = previous.copy()
     previous.geometry = previous.geometry.buffer(RADIUS_METERS)
-    joined: gpd.GeoDataFrame = gpd.sjoin(current, previous, how='inner', op='intersects')
+    joined: gpd.GeoDataFrame = gpd.sjoin(current, previous, how='inner', predicate='intersects')
     joined: gpd.GeoDataFrame = joined[joined.index != joined.index_right]  # Filter out self-matches
     # keep only similar assets connected
     for criteria in CRITERIA:
@@ -61,7 +63,7 @@ def calc_yearly_inflation(current: gpd.GeoDataFrame, previous: gpd.GeoDataFrame)
     current_price_per_meter: pd.Series = (joined[f'{Config.DEAL_SUM_FIELD_NAME}_left'] / joined[f'{Config.SIZE_FIELD_NAME}_left'])
     previous_price_per_meter: pd.Series = (joined[f'{Config.DEAL_SUM_FIELD_NAME}_right'] / joined[f'{Config.SIZE_FIELD_NAME}_right'])
     inflation: pd.Series = current_price_per_meter / previous_price_per_meter
-    avg_inflation: np.ndarray = np.mean(inflation.to_numpy())
+    avg_inflation: np.ndarray = np.mean(inflation[inflation <= MAXIMUM_YEARLY_INFLATION])
     return float(avg_inflation), len(joined)
 
 
@@ -96,6 +98,8 @@ if __name__ == '__main__':
         else:
             cumulative_inflation.append(cumulative_inflation[i-1] * inflation_rates[i])
 
+    # --- inflation plot ---
+
     # Plotting
     plt.figure(figsize=(10, 5))
     plt.plot(years, cumulative_inflation, marker='o')
@@ -106,8 +110,6 @@ if __name__ == '__main__':
     plt.xticks(years, rotation=45)
     plt.tight_layout()
     plt.show()
-
-    # --- inflation plot ---
 
     # Plotting inflation rates with number of observations as labels
     plt.figure(figsize=(10, 5))
@@ -124,3 +126,5 @@ if __name__ == '__main__':
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+
+

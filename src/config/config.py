@@ -54,6 +54,8 @@ class Config:
     SETTLEMENT_NUMERIC_FIELD_NAME: str = "settlement_numeric"
     ADDRESS_IDX_FIELD_NAME: str = "address_idx"
     DEAL_YEAR_FIELD_NAME: str = "year"
+    DEAL_TYPE_NUMERIC_FIELD_NAME: str = "deal_type_numeric"
+    DEAL_DATE_NUMERIC_FIELD_NAME: str = "deal_date_numeric"
 
     # other
     ITM_EPSG_CODE: str = "2039"
