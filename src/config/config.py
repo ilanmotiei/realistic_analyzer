@@ -1,6 +1,25 @@
+from typing import List
+
+
 class Config:
-    DATA_LOCATION_FILEPATH: str = "/Users/ilanmotiei/Desktop/gov_scraper/miscellaneous/results_replicas/replicaC/parsed_results.csv"
+    DATA_LOCATION_FILEPATH: str = "/Users/ilanmotiei/Desktop/gov_scraper/results/parsed_results.csv"
     GEOCODING_DATA_DIR_LOCATION: str = "/Users/ilanmotiei/Desktop/gov_scraper/geolocation_results/pages/"
+    FLOORS_TRANSLATIONS_LOCATION: str = "/Users/ilanmotiei/Desktop/University/לימודים/מנהל עסקים/" \
+                                        "Networked Markets & Graph Analysis/real_estate_analysis/analyzer/data/" \
+                                        "floors_translations_pages_gpt4_batch/"
+    ALL_ISRAELI_SETTLEMENTS_LOCATION: str = "/Users/ilanmotiei/Desktop/University/לימודים/מנהל עסקים/" \
+                                        "Networked Markets & Graph Analysis/real_estate_analysis/analyzer/data/" \
+                                        "all_israeli_settlements.json"
+
+    POST_PROCESSED_ADDRESSES_LOCATION: str = "/Users/ilanmotiei/Desktop/University/לימודים/מנהל עסקים/" \
+                                        "Networked Markets & Graph Analysis/real_estate_analysis/analyzer/data/24062024/" \
+                                            "addresses.csv"
+    POST_PROCESSED_DEALS_LOCATION: str = "/Users/ilanmotiei/Desktop/University/לימודים/מנהל עסקים/" \
+                                        "Networked Markets & Graph Analysis/real_estate_analysis/analyzer/data/24062024/" \
+                                            "deals.csv"
+    POST_PROCESSED_EDGES_LOCATION: str = "/Users/ilanmotiei/Desktop/University/לימודים/מנהל עסקים/" \
+                                         "Networked Markets & Graph Analysis/real_estate_analysis/analyzer/data/24062024/" \
+                                         "addresses_edges.csv"
 
     # Original fields names
     DEAL_DATE_FIELD_NAME: str = "DEALDATE"
@@ -8,7 +27,7 @@ class Config:
     FULL_ADDRESS_FIELD_NAME: str = "FULLADRESS"
     DISPLAY_ADDRESS_FIELD_NAME: str = "DISPLAYADRESS"
     GUSH_FIELD_NAME: str = "GUSH"
-    DEAL_DESCRIPTION_FIELD_NAME: str = "DEALNATUREDESCRIPTION"
+    DEAL_TYPE_FIELD_NAME: str = "DEALNATUREDESCRIPTION"
     ROOMS_NUMBER_FIELD_NAME: str = "ASSETROOMNUM"
     FLOOR_NUMBER_FIELD_NAME: str = "FLOORNO"
     SIZE_FIELD_NAME: str = "DEALNATURE"
@@ -30,6 +49,13 @@ class Config:
     Y_ITM_FIELD_NAME: str = "Y_ITM"
     X_WSG_FIELD_NAME: str = "X_WSG84"
     Y_WSG_FIELD_NAME: str = "Y_WSG84"
+    STARTING_FLOOR_NUMBER_FIELD_NAME: str = "start_floor"
+    NUMBER_FLOORS_FIELD_NAME: str = "num_floors"
+    SETTLEMENT_NUMERIC_FIELD_NAME: str = "settlement_numeric"
+    ADDRESS_IDX_FIELD_NAME: str = "address_idx"
+    DEAL_YEAR_FIELD_NAME: str = "year"
+    DEAL_TYPE_NUMERIC_FIELD_NAME: str = "deal_type_numeric"
+    DEAL_DATE_NUMERIC_FIELD_NAME: str = "deal_date_numeric"
 
     # other
     ITM_EPSG_CODE: str = "2039"
@@ -38,3 +64,5 @@ class Config:
     DATA_DIRPATH = "/Users/ilanmotiei/Desktop/University/לימודים/מנהל עסקים/Networked Markets & Graph Analysis/real_estate_analysis/analyzer/data"
     VERTICES_FILEPATH = f'{DATA_DIRPATH}/vertices.csv'
     EDGES_FILEPATH = f'{DATA_DIRPATH}/edges.csv'
+
+    SETTLEMENTS_SUBSET: List[str] = ['תל אביב']
