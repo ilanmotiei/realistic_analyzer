@@ -57,7 +57,7 @@ def create_prompt(floor_number: str) -> str:
 
 
 client = OpenAI(
-    api_key='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',
+    api_key='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',  # not valid anymore friend..
     organization='org-2gSXnlG2Pv2dEEFDiIgev2oS'
 )
 
